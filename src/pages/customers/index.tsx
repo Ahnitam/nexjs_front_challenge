@@ -1,28 +1,40 @@
 import Link from "next/link";
 import useSWR from "swr";
 import { AiOutlineUserAdd } from "react-icons/ai";
+import { RouteNavigation } from "@/interfaces/RouteNavigation";
+import { PagesNavigation } from "@/components/PagesNavigation";
 
 const fetcher = (url: string | URL | Request) =>
   fetch(url, {
     headers: {
       Accept: "application/json",
       Authorization:
-        "Bearer 1|nF3EKeL897Rzyl80sOSnYdg9CwqfiGWnJGGQgxVi7354bfc4",
+        "Bearer 2|BMJeHEVWCkVOUx7Psjgfxg26iDTh9WLPLlWKOd7If1eee604",
     },
   }).then((r) => r.json());
 
+const navigationRoutes: RouteNavigation[] = [
+  {
+    href: "/",
+    title: "Inicio",
+  },
+  {
+    href: "/customers",
+    title: "Clientes",
+  },
+];
 export default function Customers() {
   const { data, error } = useSWR(
-    "http://challenge.test/api/customers",
+    "http://localhost:8000/api/customers",
     fetcher
   );
 
   console.log(data, error);
   return (
     <div className="flex flex-col h-full w-full items-start p-2 gap-2">
-      <h1 className="font-bold">Lista de Clientes</h1>
-      <div className="flex flex-col grow w-full bg-gray-800 rounded-xl p-4 gap-4">
-        <div className="flex justify-between">
+      <PagesNavigation routes={navigationRoutes} />
+      <div className="flex flex-col grow w-full bg-gray-800 rounded-xl px-4 py-2 gap-4">
+        <div className="flex items-center justify-between">
           <label className="font-bold text-nowrap">
             Buscar por nome:
             <input
@@ -32,8 +44,8 @@ export default function Customers() {
             />
           </label>
           <Link href="/customers/add">
-            <button className="p-2 bg-green-600 hover:bg-green-700 text-white rounded-md">
-              <AiOutlineUserAdd className="text-white text-4xl cursor-pointer" />
+            <button className="flex items-center gap-2 p-2 bg-green-600 hover:bg-green-700 text-white rounded-md">
+              <AiOutlineUserAdd className="text-white text-xl cursor-pointer" />
               <span>Adicionar Cliente</span>
             </button>
           </Link>

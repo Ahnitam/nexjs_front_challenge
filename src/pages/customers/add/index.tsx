@@ -1,19 +1,25 @@
-import Link from "next/link";
+import { PagesNavigation } from "@/components/PagesNavigation";
+import { RouteNavigation } from "@/interfaces/RouteNavigation";
+
+const navigationRoutes: RouteNavigation[] = [
+  {
+    href: "/",
+    title: "Inicio",
+  },
+  {
+    href: "/customers",
+    title: "Clientes",
+  },
+  {
+    href: "/customers/add",
+    title: "Adicionar Cliente",
+  },
+];
 
 export default function CustomerAdd() {
   return (
     <div className="flex flex-col h-full w-full items-start p-2 gap-2">
-      <nav>
-        <Link href="/" className="">
-          Inicio
-        </Link>
-        <span> {">"} </span>
-        <Link href="/customers" className="">
-          Clientes
-        </Link>
-        <span> {">"} </span>
-        <span className="font-bold">Adicionar Cliente</span>
-      </nav>
+      <PagesNavigation routes={navigationRoutes} />
       <div className="flex flex-col grow w-full items-center bg-gray-800 rounded-xl p-4 gap-4">
         <form className="flex flex-col gap-4 w-full">
           <label className="flex flex-col gap-1">

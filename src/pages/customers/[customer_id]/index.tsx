@@ -1,3 +1,5 @@
+import { PagesNavigation } from "@/components/PagesNavigation";
+import { RouteNavigation } from "@/interfaces/RouteNavigation";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { AiOutlineUser } from "react-icons/ai";
@@ -8,7 +10,7 @@ const fetcher = (url: string | URL | Request) =>
     headers: {
       Accept: "application/json",
       Authorization:
-        "Bearer 1|nF3EKeL897Rzyl80sOSnYdg9CwqfiGWnJGGQgxVi7354bfc4",
+        "Bearer 2|BMJeHEVWCkVOUx7Psjgfxg26iDTh9WLPLlWKOd7If1eee604",
     },
   }).then((r) => r.json());
 
@@ -16,12 +18,26 @@ export default function Customer() {
   const router = useRouter();
   const { customer_id } = router.query;
   const { data, error } = useSWR(
-    `http://challenge.test/api/customers/${customer_id}`,
+    `http://localhost:8000/api/customers/${customer_id}`,
     fetcher
   );
+  const navigationRoutes: RouteNavigation[] = [
+    {
+      href: "/",
+      title: "Inicio",
+    },
+    {
+      href: "/customers",
+      title: "Clientes",
+    },
+    {
+      href: `/customers/${customer_id}`,
+      title: "Cliente",
+    },
+  ];
   return (
     <div className="flex flex-col h-full w-full items-start p-2 gap-2">
-      <h1 className="font-bold">Cliente</h1>
+      <PagesNavigation routes={navigationRoutes} />
       <div className="flex flex-col grow w-full items-center bg-gray-800 rounded-xl p-4 gap-4">
         <AiOutlineUser className="text-white text-8xl" />
         <table className="min-w-min">

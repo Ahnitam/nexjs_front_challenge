@@ -1,3 +1,5 @@
+import { PagesNavigation } from "@/components/PagesNavigation";
+import { RouteNavigation } from "@/interfaces/RouteNavigation";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { AiOutlineCreditCard } from "react-icons/ai";
@@ -8,7 +10,7 @@ const fetcher = (url: string | URL | Request) =>
     headers: {
       Accept: "application/json",
       Authorization:
-        "Bearer 1|nF3EKeL897Rzyl80sOSnYdg9CwqfiGWnJGGQgxVi7354bfc4",
+        "Bearer 2|BMJeHEVWCkVOUx7Psjgfxg26iDTh9WLPLlWKOd7If1eee604",
     },
   }).then((r) => r.json());
 
@@ -16,19 +18,37 @@ export default function Cards() {
   const router = useRouter();
   const { customer_id } = router.query;
   const { data, error } = useSWR(
-    "http://challenge.test/api/customers/" + customer_id + "/cards",
+    "http://localhost:8000/api/customers/" + customer_id + "/cards",
     fetcher
   );
+  const navigationRoutes: RouteNavigation[] = [
+    {
+      href: "/",
+      title: "Inicio",
+    },
+    {
+      href: "/customers",
+      title: "Clientes",
+    },
+    {
+      href: `/customers/${customer_id}`,
+      title: "Cliente",
+    },
+    {
+      href: `/customers/${customer_id}/cards`,
+      title: "Cartões",
+    },
+  ];
 
   console.log(data, error);
   return (
     <div className="flex flex-col h-full w-full items-start p-2 gap-2">
-      <h1 className="font-bold">Lista de Cartões</h1>
-      <div className="flex flex-col grow w-full bg-gray-800 rounded-xl p-4 gap-4">
+      <PagesNavigation routes={navigationRoutes} />
+      <div className="flex flex-col grow w-full bg-gray-800 rounded-xl px-4 py-2 gap-4">
         <div className="flex justify-end">
-          <Link href="/customers/add">
-            <button className="p-2 bg-green-600 hover:bg-green-700 text-white rounded-md">
-              <AiOutlineCreditCard className="text-white text-4xl cursor-pointer" />
+          <Link href={`/customers/${customer_id}/cards/add`}>
+            <button className="flex items-center gap-2 p-2 bg-green-600 hover:bg-green-700 text-white rounded-md">
+              <AiOutlineCreditCard className="text-white text-xl cursor-pointer" />
               <span>Adicionar Cartão</span>
             </button>
           </Link>
