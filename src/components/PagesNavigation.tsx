@@ -8,7 +8,7 @@ interface PagesNavigationProps extends ComponentProps<"nav"> {
 
 export function PagesNavigation({ routes }: PagesNavigationProps) {
   return (
-    <nav className="flex items-center gap-2">
+    <nav className="flex h-10 items-center gap-2">
       {routes?.map((route, index) => (
         <>
           <ItemNavigation

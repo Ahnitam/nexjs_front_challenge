@@ -7,6 +7,7 @@ interface ItemNavigationProps extends ComponentProps<typeof Link> {
 }
 
 export function ItemNavigation({
+  key,
   isCurrent,
   href,
   title,
@@ -15,7 +16,7 @@ export function ItemNavigation({
   return (
     <Link
       href={href}
-      className={`flex items-center rounded-xl h-8 p-2 ${
+      className={`flex items-center rounded-xl h-full p-2 ${
         isCurrent ? "font-bold" : "bg-gray-800 hover:bg-gray-700"
       }`}
       {...props}
