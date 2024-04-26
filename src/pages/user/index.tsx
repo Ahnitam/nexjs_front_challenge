@@ -20,7 +20,7 @@ export default function User() {
     ]);
   }, [setNavigationRoutes]);
   return (
-    <div className="flex flex-col grow w-full bg-gray-800 rounded-xl p-4 gap-4">
+    <div className="flex flex-col h-full w-full bg-gray-800 rounded-xl p-4 gap-4">
       <table>
         <tbody>
           <tr>

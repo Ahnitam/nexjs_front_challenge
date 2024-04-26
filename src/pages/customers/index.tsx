@@ -23,7 +23,7 @@ export default function Customers() {
   }, [setNavigationRoutes]);
 
   return (
-    <div className="flex flex-col grow w-full bg-gray-800 rounded-xl px-4 py-2 gap-4">
+    <div className="flex flex-col h-full min-w-full w-max bg-gray-800 rounded-xl px-4 py-2 gap-4">
       <div className="flex items-center justify-between">
         <label className="font-bold text-nowrap">
           Buscar por nome:

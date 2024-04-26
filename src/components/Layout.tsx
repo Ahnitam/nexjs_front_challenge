@@ -12,11 +12,9 @@ export function Layout({ children }: { children?: React.ReactNode }) {
       className={`flex flex-col h-screen max-h-screen ${inter.className} overflow-hidden`}
     >
       <Header />
-      <main className="grow">
-        <div className="flex flex-col h-full w-full items-start p-2 gap-2">
-          <PagesNavigation routes={navigationRoutes} />
-          <div className="grow w-full">{children}</div>
-        </div>
+      <main className="grow flex flex-col w-full items-start p-2 gap-2">
+        <PagesNavigation routes={navigationRoutes} />
+        <div className="grow w-full overflow-x-auto">{children}</div>
       </main>
     </div>
   );

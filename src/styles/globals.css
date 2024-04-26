@@ -6,6 +6,31 @@ body {
   @apply bg-gray-900 text-white;
 }
 
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  border-radius: 100vh;
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  border-radius: 100vh;
+  background: #222423;
+  border: 3px solid #f6f7ed;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  border-radius: 100vh;
+  background: #0f0f0f;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
