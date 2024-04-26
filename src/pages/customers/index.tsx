@@ -45,6 +45,7 @@ export default function Customers() {
       setNavigationRoutes?.([]);
     };
   }, [setNavigationRoutes]);
+
   return (
     <div className="flex flex-col h-full max-h-full min-w-full w-max bg-gray-800 rounded-xl px-4 py-2 gap-4">
       <div className="flex items-center justify-between">
@@ -59,10 +60,16 @@ export default function Customers() {
       </div>
       <div
         className={`flex flex-col grow rounded-xl overflow-y-auto ${
-          isLoading ? "justify-center items-center" : "justify-start"
+          isLoading || error ? "justify-center items-center" : "justify-start"
         }`}
       >
-        {isLoading ? <p>Carregando...</p> : <CustomersList customers={data} />}
+        {isLoading ? (
+          <p>Carregando...</p>
+        ) : error ? (
+          <p>{error.message}</p>
+        ) : (
+          <CustomersList customers={data} />
+        )}
       </div>
     </div>
   );

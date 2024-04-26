@@ -25,7 +25,12 @@ export function FetcherProvider({ children }: FetcherProviderProps) {
             "Bearer 5|mJJ82jAg7J9PH27NnuMCZnSPOg4UJFo0ekR1X22X708766a2",
         },
       });
-      return await r.json();
+      if (r.status === 401) {
+        throw new Error("Não autorizado");
+      } else if (!r.ok) {
+        throw new Error("Falha ao buscar dados");
+      }
+      return r.json();
     },
   };
   return (
