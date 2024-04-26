@@ -3,12 +3,12 @@ import useSWR from "swr";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { useFetcherContext } from "@/providers/FetcherProvider";
 import { useEffect } from "react";
-import { usePaginationContext } from "@/providers/PaginationProvider";
+import { useNavigationContext } from "@/providers/NavigationProvider";
 
 export default function Customers() {
   const { fetcher } = useFetcherContext();
   const { data, error } = useSWR("/customers", fetcher || null);
-  const { setNavigationRoutes } = usePaginationContext();
+  const { setNavigationRoutes } = useNavigationContext();
   useEffect(() => {
     setNavigationRoutes?.([
       {

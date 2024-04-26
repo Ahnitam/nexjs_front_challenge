@@ -1,12 +1,12 @@
 import { useFetcherContext } from "@/providers/FetcherProvider";
-import { usePaginationContext } from "@/providers/PaginationProvider";
+import { useNavigationContext } from "@/providers/NavigationProvider";
 import { useEffect } from "react";
 import useSWR from "swr";
 
 export default function User() {
   const { fetcher } = useFetcherContext();
   const { data, error } = useSWR("/user", fetcher || null);
-  const { setNavigationRoutes } = usePaginationContext();
+  const { setNavigationRoutes } = useNavigationContext();
   useEffect(() => {
     setNavigationRoutes?.([
       {

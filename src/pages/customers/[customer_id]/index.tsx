@@ -1,5 +1,5 @@
 import { useFetcherContext } from "@/providers/FetcherProvider";
-import { usePaginationContext } from "@/providers/PaginationProvider";
+import { useNavigationContext } from "@/providers/NavigationProvider";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -10,7 +10,7 @@ export default function Customer() {
   const { fetcher } = useFetcherContext();
   const { customer_id } = useRouter().query;
   const { data, error } = useSWR(`/customers/${customer_id}`, fetcher || null);
-  const { setNavigationRoutes } = usePaginationContext();
+  const { setNavigationRoutes } = useNavigationContext();
   useEffect(() => {
     setNavigationRoutes?.([
       {

@@ -1,6 +1,17 @@
+import { useNavigationContext } from "@/providers/NavigationProvider";
 import Link from "next/link";
+import { useEffect } from "react";
 
 export default function Home() {
+  const { setNavigationRoutes } = useNavigationContext();
+  useEffect(() => {
+    setNavigationRoutes?.([
+      {
+        href: "/",
+        title: "Inicio",
+      },
+    ]);
+  }, [setNavigationRoutes]);
   return (
     <main className="flex flex-col min-h-full items-center justify-around p-12">
       <h1 className="text-4xl font-bold">Bem vindo</h1>

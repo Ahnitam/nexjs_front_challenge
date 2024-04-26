@@ -1,5 +1,5 @@
 import { useFetcherContext } from "@/providers/FetcherProvider";
-import { usePaginationContext } from "@/providers/PaginationProvider";
+import { useNavigationContext } from "@/providers/NavigationProvider";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -13,7 +13,7 @@ export default function Cards() {
     "/customers/" + customer_id + "/cards",
     fetcher || null
   );
-  const { setNavigationRoutes } = usePaginationContext();
+  const { setNavigationRoutes } = useNavigationContext();
   useEffect(() => {
     setNavigationRoutes?.([
       {

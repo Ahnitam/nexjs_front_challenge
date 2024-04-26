@@ -7,30 +7,30 @@ import {
   useState,
 } from "react";
 
-interface PaginationProviderProps extends PropsWithChildren {}
-interface PaginationContextType {
+interface NavigationProviderProps extends PropsWithChildren {}
+interface NavigationContextType {
   navigationRoutes: RouteNavigation[];
   setNavigationRoutes?: (routes: RouteNavigation[]) => void;
 }
-const PaginationContext = createContext<PaginationContextType>({
+const NavigationContext = createContext<NavigationContextType>({
   navigationRoutes: [],
   setNavigationRoutes: undefined,
 });
 
-export function usePaginationContext() {
-  return useContext(PaginationContext);
+export function useNavigationContext() {
+  return useContext(NavigationContext);
 }
 
-export function PaginationProvider({ children }: PaginationProviderProps) {
+export function NavigationProvider({ children }: NavigationProviderProps) {
   const [routes, setRoutes] = useState<RouteNavigation[]>([]);
   const setFunction = useCallback((routesNavigation: RouteNavigation[]) => {
     setRoutes(routesNavigation);
   }, []);
   return (
-    <PaginationContext.Provider
+    <NavigationContext.Provider
       value={{ navigationRoutes: routes, setNavigationRoutes: setFunction }}
     >
       {children}
-    </PaginationContext.Provider>
+    </NavigationContext.Provider>
   );
 }

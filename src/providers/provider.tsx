@@ -1,12 +1,12 @@
 import { PropsWithChildren } from "react";
 import { FetcherProvider } from "./FetcherProvider";
-import { PaginationProvider } from "./PaginationProvider";
+import { NavigationProvider } from "./NavigationProvider";
 
 interface ProviderProps extends PropsWithChildren {}
 export function Provider({ children }: ProviderProps) {
   return (
-    <PaginationProvider>
+    <NavigationProvider>
       <FetcherProvider>{children}</FetcherProvider>
-    </PaginationProvider>
+    </NavigationProvider>
   );
 }

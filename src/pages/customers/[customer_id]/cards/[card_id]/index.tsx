@@ -1,10 +1,10 @@
-import { usePaginationContext } from "@/providers/PaginationProvider";
+import { useNavigationContext } from "@/providers/NavigationProvider";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 export default function Card() {
   const { customer_id, card_id } = useRouter().query;
-  const { setNavigationRoutes } = usePaginationContext();
+  const { setNavigationRoutes } = useNavigationContext();
   useEffect(() => {
     setNavigationRoutes?.([
       {
