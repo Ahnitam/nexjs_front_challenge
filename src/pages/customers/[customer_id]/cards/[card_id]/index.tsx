@@ -1,9 +1,20 @@
+import { CardInfo } from "@/components/CardInfo";
+import { LinkButton } from "@/components/LinkButton";
+import { Loading } from "@/components/Loading";
+import { Error } from "@/components/Error";
+import { useFetcherContext } from "@/providers/FetcherProvider";
 import { useNavigationContext } from "@/providers/NavigationProvider";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import useSWR from "swr";
 
 export default function Card() {
+  const { fetcher } = useFetcherContext();
   const { customer_id, card_id } = useRouter().query;
+  const { data, error, isLoading } = useSWR(
+    `/customers/${customer_id}/cards/${card_id}`,
+    fetcher || null
+  );
   const { setNavigationRoutes } = useNavigationContext();
   useEffect(() => {
     setNavigationRoutes?.([
@@ -29,7 +40,31 @@ export default function Card() {
       },
     ]);
   }, [setNavigationRoutes, customer_id, card_id]);
+
   return (
-    <div className="flex flex-col grow w-full items-center bg-gray-800 rounded-xl p-4 gap-4"></div>
+    <div className="flex flex-col min-h-full min-w-full w-max bg-gray-800 rounded-xl px-4 py-8 gap-4 items-center">
+      {isLoading || error ? (
+        isLoading ? (
+          <Loading />
+        ) : (
+          <Error message={error.message} />
+        )
+      ) : (
+        <>
+          <CardInfo card={data} />
+          <div className="flex gap-4">
+            <LinkButton
+              href={`/customers/${customer_id}/cards/${card_id}/edit`}
+              color="yellow"
+            >
+              <span>Editar</span>
+            </LinkButton>
+            <button className="p-2 hover:bg-red-700 bg-red-600 text-white rounded-md">
+              Excluir
+            </button>
+          </div>
+        </>
+      )}
+    </div>
   );
 }

@@ -1,4 +1,3 @@
-import { LinkButton } from "@/components/LinkButton";
 import { Loading } from "@/components/Loading";
 import { Error } from "@/components/Error";
 import { useFetcherContext } from "@/providers/FetcherProvider";
@@ -6,9 +5,8 @@ import { useNavigationContext } from "@/providers/NavigationProvider";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import useSWR from "swr";
-import { CustomerInfo } from "@/components/CustomerInfo";
 
-export default function Customer() {
+export default function Edit() {
   const { fetcher } = useFetcherContext();
   const { customer_id } = useRouter().query;
   const { data, error, isLoading } = useSWR(
@@ -30,6 +28,10 @@ export default function Customer() {
         href: `/customers/${customer_id}`,
         title: "Cliente",
       },
+      {
+        href: `/customers/${customer_id}/edit`,
+        title: "Editar Cliente",
+      },
     ]);
   }, [setNavigationRoutes, customer_id]);
   return (
@@ -41,20 +43,7 @@ export default function Customer() {
           <Error message={error.message} />
         )
       ) : (
-        <>
-          <CustomerInfo customer={data} />
-          <div className="flex gap-4">
-            <LinkButton href={`/customers/${customer_id}/edit`} color="yellow">
-              <span>Editar</span>
-            </LinkButton>
-            <LinkButton href={`/customers/${customer_id}/cards`} color="yellow">
-              <span>Cartões</span>
-            </LinkButton>
-            <button className="p-2 hover:bg-red-700 bg-red-600 text-white rounded-md">
-              Excluir
-            </button>
-          </div>
-        </>
+        <span>Formulário de edição</span>
       )}
     </div>
   );
