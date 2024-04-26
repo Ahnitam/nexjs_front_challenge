@@ -3,15 +3,7 @@ import useSWR from "swr";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { RouteNavigation } from "@/interfaces/RouteNavigation";
 import { PagesNavigation } from "@/components/PagesNavigation";
-
-const fetcher = (url: string | URL | Request) =>
-  fetch(url, {
-    headers: {
-      Accept: "application/json",
-      Authorization:
-        "Bearer 2|BMJeHEVWCkVOUx7Psjgfxg26iDTh9WLPLlWKOd7If1eee604",
-    },
-  }).then((r) => r.json());
+import { useFetcherContext } from "@/providers/FetcherProvider";
 
 const navigationRoutes: RouteNavigation[] = [
   {
@@ -24,12 +16,9 @@ const navigationRoutes: RouteNavigation[] = [
   },
 ];
 export default function Customers() {
-  const { data, error } = useSWR(
-    "http://localhost:8000/api/customers",
-    fetcher
-  );
+  const { fetcher } = useFetcherContext();
+  const { data, error } = useSWR("/customers", fetcher || null);
 
-  console.log(data, error);
   return (
     <div className="flex flex-col h-full w-full items-start p-2 gap-2">
       <PagesNavigation routes={navigationRoutes} />

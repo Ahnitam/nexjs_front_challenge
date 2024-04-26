@@ -1,26 +1,15 @@
 import { PagesNavigation } from "@/components/PagesNavigation";
 import { RouteNavigation } from "@/interfaces/RouteNavigation";
+import { useFetcherContext } from "@/providers/FetcherProvider";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { AiOutlineUser } from "react-icons/ai";
 import useSWR from "swr";
 
-const fetcher = (url: string | URL | Request) =>
-  fetch(url, {
-    headers: {
-      Accept: "application/json",
-      Authorization:
-        "Bearer 2|BMJeHEVWCkVOUx7Psjgfxg26iDTh9WLPLlWKOd7If1eee604",
-    },
-  }).then((r) => r.json());
-
 export default function Customer() {
-  const router = useRouter();
-  const { customer_id } = router.query;
-  const { data, error } = useSWR(
-    `http://localhost:8000/api/customers/${customer_id}`,
-    fetcher
-  );
+  const { fetcher } = useFetcherContext();
+  const { customer_id } = useRouter().query;
+  const { data, error } = useSWR(`/customers/${customer_id}`, fetcher || null);
   const navigationRoutes: RouteNavigation[] = [
     {
       href: "/",

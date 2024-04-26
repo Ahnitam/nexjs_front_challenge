@@ -1,15 +1,7 @@
 import { PagesNavigation } from "@/components/PagesNavigation";
 import { RouteNavigation } from "@/interfaces/RouteNavigation";
+import { useFetcherContext } from "@/providers/FetcherProvider";
 import useSWR from "swr";
-
-const fetcher = (url: string | URL | Request) =>
-  fetch(url, {
-    headers: {
-      Accept: "application/json",
-      Authorization:
-        "Bearer 2|BMJeHEVWCkVOUx7Psjgfxg26iDTh9WLPLlWKOd7If1eee604",
-    },
-  }).then((r) => r.json());
 
 const navigationRoutes: RouteNavigation[] = [
   {
@@ -22,7 +14,8 @@ const navigationRoutes: RouteNavigation[] = [
   },
 ];
 export default function User() {
-  const { data, error } = useSWR("http://localhost:8000/api/user", fetcher);
+  const { fetcher } = useFetcherContext();
+  const { data, error } = useSWR("/user", fetcher || null);
 
   console.log(data, error);
   return (
