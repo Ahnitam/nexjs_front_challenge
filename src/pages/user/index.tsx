@@ -24,7 +24,7 @@ export default function User() {
     ]);
   }, [setNavigationRoutes]);
   return (
-    <div className="flex flex-col min-h-full min-w-full w-max bg-gray-800 rounded-xl px-4 py-8 gap-4 items-center">
+    <div className="flex flex-col min-w-full w-max bg-gray-800 rounded-xl px-4 py-8 gap-4 items-center">
       {isLoading || error ? (
         isLoading ? (
           <Loading />

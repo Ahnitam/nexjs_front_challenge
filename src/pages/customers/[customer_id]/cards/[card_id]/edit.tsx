@@ -5,6 +5,7 @@ import { useNavigationContext } from "@/providers/NavigationProvider";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import useSWR from "swr";
+import { CardForm } from "@/components/CardForm";
 
 export default function EditCard() {
   const { fetcher } = useFetcherContext();
@@ -52,7 +53,7 @@ export default function EditCard() {
           <Error message={error.message} />
         )
       ) : (
-        <span>Formulário de edição</span>
+        <CardForm />
       )}
     </div>
   );
