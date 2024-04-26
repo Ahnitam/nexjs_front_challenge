@@ -1,5 +1,5 @@
+import { LinkButton } from "@/components/LinkButton";
 import { useNavigationContext } from "@/providers/NavigationProvider";
-import Link from "next/link";
 import { useEffect } from "react";
 
 export default function Home() {
@@ -20,11 +20,9 @@ export default function Home() {
         TailwindCSS.
       </p>
       <p>Gerenciamento de Clientes com Cartão</p>
-      <Link href="/customers">
-        <button className="p-2 bg-green-600 text-white rounded-md">
-          Acessar
-        </button>
-      </Link>
+      <LinkButton href="/customers" color="green">
+        <span>Acessar</span>
+      </LinkButton>
     </main>
   );
 }

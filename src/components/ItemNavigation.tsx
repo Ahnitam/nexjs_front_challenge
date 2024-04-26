@@ -7,7 +7,6 @@ interface ItemNavigationProps extends ComponentProps<typeof Link> {
 }
 
 export function ItemNavigation({
-  key,
   isCurrent,
   href,
   title,
