@@ -1,6 +1,5 @@
 import { LinkButton } from "@/components/LinkButton";
 import { useNavigationContext } from "@/providers/NavigationProvider";
-import { getSession } from "next-auth/react";
 import { useEffect } from "react";
 
 export default function Home() {
@@ -26,16 +25,4 @@ export default function Home() {
       </LinkButton>
     </main>
   );
-}
-
-export async function getServerSideProps(context: any) {
-  const { req } = context;
-  const session = await getSession({ req });
-  console.log(session);
-  if (session) {
-    return {
-      redirect: { destination: "/" },
-    };
-  }
-  return {};
 }

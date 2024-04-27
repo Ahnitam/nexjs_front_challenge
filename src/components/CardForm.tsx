@@ -1,5 +1,6 @@
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { FormInputWithLabel } from "./FormInput";
+import { NextRouter, useRouter } from "next/router";
 
 interface ICardForm {
   name: string;
@@ -12,7 +13,52 @@ interface CardFormProps {
   card?: any;
 }
 
+async function onAdd(router: NextRouter, data: ICardForm) {
+  const r = await fetch(
+    `${process.env.API_URL}/customers/${router.query.customer_id}/cards`,
+    {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }
+  );
+  if (r.status === 201) {
+    alert("Cartão cadastrado com sucesso");
+    router.push(`/customers/${router.query.customer_id}/cards`);
+  } else {
+    console.log(r);
+    alert("Falha ao cadastrar cartão");
+  }
+}
+
+async function onUpdate(router: NextRouter, data: ICardForm) {
+  const r = await fetch(
+    `${process.env.API_URL}/customers/${router.query.customer_id}/cards/${router.query.card_id}`,
+    {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }
+  );
+  if (r.status === 200) {
+    alert("Cartão atualizado com sucesso");
+    router.push(
+      `/customers/${router.query.customer_id}/cards/${router.query.card_id}`
+    );
+  } else {
+    console.log(r);
+    alert("Falha ao atualizar cartão");
+  }
+}
+
 export function CardForm({ card }: CardFormProps) {
+  const router = useRouter();
   const {
     control,
     handleSubmit,
@@ -26,8 +72,12 @@ export function CardForm({ card }: CardFormProps) {
     },
     mode: "onChange",
   });
-  const onSubmit: SubmitHandler<ICardForm> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<ICardForm> = async (data) => {
+    if (card) {
+      onUpdate(router, data);
+    } else {
+      onAdd(router, data);
+    }
   };
   return (
     <form

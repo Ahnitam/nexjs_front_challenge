@@ -28,7 +28,7 @@ export function FetcherProvider({ children }: FetcherProviderProps) {
         headers: {
           Accept: "application/json",
           Authorization:
-            "Bearer 2|0DxKJY0c1VKerikZoT54emnyDxK4xHbLf3R2fIcw7a698ca4",
+            "Bearer 5|mJJ82jAg7J9PH27NnuMCZnSPOg4UJFo0ekR1X22X708766a2",
         },
       });
       if (r.status === 401) {
