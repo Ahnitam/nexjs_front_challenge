@@ -14,6 +14,7 @@ export default function EditCard() {
     `/customers/${customer_id}/cards/${card_id}`,
     fetcher || null
   );
+  console.log(data);
   const { setNavigationRoutes } = useNavigationContext();
   useEffect(() => {
     setNavigationRoutes?.([
@@ -53,7 +54,7 @@ export default function EditCard() {
           <Error message={error.message} />
         )
       ) : (
-        <CardForm />
+        <CardForm card={data} />
       )}
     </div>
   );
