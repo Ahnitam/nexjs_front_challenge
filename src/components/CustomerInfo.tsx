@@ -13,6 +13,10 @@ export function CustomerInfo({ customer }: CustomerInfoProps) {
         <tbody>
           <TableItemLineFIeldValue field="ID" value={customer.id} />
           <TableItemLineFIeldValue field="Nome" value={customer.name} />
+          <TableItemLineFIeldValue
+            field="Sobrenome"
+            value={customer.last_name}
+          />
           <TableItemLineFIeldValue field="Email" value={customer.email} />
           <TableItemLineFIeldValue field="Telefone" value={customer.phone} />
           <TableItemLineFIeldValue

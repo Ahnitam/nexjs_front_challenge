@@ -1,8 +1,13 @@
-import { createContext, PropsWithChildren, useContext } from "react";
+import {
+  createContext,
+  PropsWithChildren,
+  useCallback,
+  useContext,
+} from "react";
 
 interface FetcherProviderProps extends PropsWithChildren {}
 interface FetcherContextType {
-  fetcher?: (url: string | URL | Request) => Promise<any>;
+  fetcher?: (url: string | URL | Request, method?: string) => Promise<any>;
 }
 const FetcherContext = createContext<FetcherContextType>({});
 
@@ -16,9 +21,10 @@ export function useFetcherContext() {
 // 5|mJJ82jAg7J9PH27NnuMCZnSPOg4UJFo0ekR1X22X708766a2
 
 export function FetcherProvider({ children }: FetcherProviderProps) {
-  let value = {
-    fetcher: async (url: string | URL | Request) => {
+  let fetcher = useCallback(
+    async (url: string | URL | Request, method?: string) => {
       const r = await fetch(`http://challenge.test/api${url}`, {
+        method: method || "GET",
         headers: {
           Accept: "application/json",
           Authorization:
@@ -27,13 +33,19 @@ export function FetcherProvider({ children }: FetcherProviderProps) {
       });
       if (r.status === 401) {
         throw new Error("Não autorizado");
+      } else if (r.status === 404) {
+        throw new Error("Não encontrado");
       } else if (!r.ok) {
         throw new Error("Falha ao buscar dados");
       }
       return r.json();
     },
-  };
+    []
+  );
+
   return (
-    <FetcherContext.Provider value={value}>{children}</FetcherContext.Provider>
+    <FetcherContext.Provider value={{ fetcher }}>
+      {children}
+    </FetcherContext.Provider>
   );
 }
