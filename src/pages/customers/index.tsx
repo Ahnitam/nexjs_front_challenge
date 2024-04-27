@@ -7,6 +7,7 @@ import { SearchInput } from "@/components/SearchInput";
 import { CustomersList } from "@/components/CustomersList";
 import { LinkButton } from "@/components/LinkButton";
 import { NextRouter, useRouter } from "next/router";
+import { Pagination } from "@/components/Pagination";
 
 function onUpdateSearch(router: NextRouter, value: string) {
   router.push({
@@ -16,10 +17,17 @@ function onUpdateSearch(router: NextRouter, value: string) {
 }
 
 function getURLQuery(router: NextRouter) {
-  return `/customers${
-    router.query.q && router.query.q.length > 3 ? "?q=" + router.query.q : ""
+  const { q, page } = router.query;
+  const isQueryValidation = q && q.length > 0;
+  const isPageValidation = page && parseInt(page as string) > 0;
+  console.log("isQueryValidation", isQueryValidation);
+  return `/customers${isQueryValidation || isPageValidation ? "?" : ""}${
+    isPageValidation ? `page=${page}` : ""
+  }${isQueryValidation && isPageValidation ? "&" : ""}${
+    isQueryValidation ? `q=${q}` : ""
   }`;
 }
+
 export default function Customers() {
   const router = useRouter();
   const { fetcher } = useFetcherContext();
@@ -51,8 +59,22 @@ export default function Customers() {
       <div className="flex items-center justify-between">
         <SearchInput
           label="Buscar por nome:"
+          value={router.query.q as string}
           onChange={(value) => onUpdateSearch(router, value)}
         />
+        {!isLoading && !error ? (
+          <Pagination
+            currentPage={data.current_page}
+            totalPages={data.last_page}
+            onPageChange={(page) => {
+              router.push({
+                pathname: "/customers",
+                query: { q: router.query.q, page },
+              });
+            }}
+          />
+        ) : null}
+
         <LinkButton href="/customers/add" color="green">
           <AiOutlineUserAdd className="text-white text-xl cursor-pointer" />
           <span>Adicionar Cliente</span>
@@ -68,7 +90,7 @@ export default function Customers() {
         ) : error ? (
           <p>{error.message}</p>
         ) : (
-          <CustomersList customers={data} />
+          <CustomersList customers={data.data} />
         )}
       </div>
     </div>

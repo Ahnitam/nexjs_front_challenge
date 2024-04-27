@@ -21,7 +21,6 @@ const FetcherContext = createContext<FetcherContextType>({});
 
 export function FetcherProvider({ children }: FetcherProviderProps) {
   let fetcher = useCallback<FetcherCallback>(async (url, method, body) => {
-    console.log("fetcher", url, method, body);
     const r = await fetch(`${process.env.API_URL}${url}`, {
       method: method || "GET",
       body: body ? JSON.stringify(body) : undefined,
