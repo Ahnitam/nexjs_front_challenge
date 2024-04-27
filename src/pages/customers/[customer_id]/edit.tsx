@@ -44,7 +44,7 @@ export default function Edit() {
           <Error message={error.message} />
         )
       ) : (
-        <CustomerForm user={data} />
+        <CustomerForm customer={data} />
       )}
     </div>
   );

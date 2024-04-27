@@ -23,6 +23,26 @@ export function CustomerInfo({ customer }: CustomerInfoProps) {
             field="Data de Nascimento"
             value={customer.birthday}
           />
+          <TableItemLineFIeldValue
+            field="Rua"
+            value={customer.address.street}
+          />
+          <TableItemLineFIeldValue
+            field="Número"
+            value={customer.address.number}
+          />
+          <TableItemLineFIeldValue
+            field="Bairro"
+            value={customer.address.district}
+          />
+          <TableItemLineFIeldValue
+            field="Cidade"
+            value={customer.address.city}
+          />
+          <TableItemLineFIeldValue
+            field="Estado"
+            value={customer.address.state}
+          />
         </tbody>
       </table>
     </>

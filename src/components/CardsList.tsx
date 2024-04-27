@@ -11,7 +11,7 @@ export function CardsList({ cards, customer_id }: CardsListProps) {
         {cards?.map((card: any) => (
           <TableItemLine
             key={card.id}
-            title={`${card.number}`}
+            title={`${card.name} (${card.number})`}
             actions={[
               {
                 href: `/customers/${customer_id}/cards/${card.id}`,

@@ -11,6 +11,7 @@ export function CardInfo({ card }: CardInfoProps) {
       <AiFillCreditCard className="text-white text-8xl" />
       <table className="min-w-min">
         <tbody>
+          <TableItemLineFIeldValue field="Nome" value={card.name} />
           <TableItemLineFIeldValue field="Number" value={card.number} />
           <TableItemLineFIeldValue field="CVV" value={card.cvv} />
           <TableItemLineFIeldValue

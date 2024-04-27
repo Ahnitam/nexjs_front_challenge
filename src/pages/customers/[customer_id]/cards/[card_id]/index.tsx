@@ -23,13 +23,12 @@ async function onDelete(router: NextRouter) {
     alert("Cartão excluído com sucesso");
     router.push(`/customers/${router.query.customer_id}/cards`);
   } else {
-    console.log(r);
     alert("Falha ao excluir cartão");
   }
 }
 export default function Card() {
-  const { fetcher } = useFetcherContext();
   const router = useRouter();
+  const { fetcher } = useFetcherContext();
   const { customer_id, card_id } = router.query;
   const { data, error, isLoading } = useSWR(
     `/customers/${customer_id}/cards/${card_id}`,

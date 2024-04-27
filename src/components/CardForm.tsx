@@ -1,6 +1,10 @@
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { FormInputWithLabel } from "./FormInput";
 import { NextRouter, useRouter } from "next/router";
+import {
+  FetcherCallback,
+  useFetcherContext,
+} from "@/providers/FetcherProvider";
 
 interface ICardForm {
   name: string;
@@ -13,76 +17,63 @@ interface CardFormProps {
   card?: any;
 }
 
-async function onAdd(router: NextRouter, data: ICardForm) {
-  const r = await fetch(
-    `${process.env.API_URL}/customers/${router.query.customer_id}/cards`,
-    {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    }
-  );
-  if (r.status === 201) {
+async function onAdd(
+  router: NextRouter,
+  fetcher: FetcherCallback,
+  data: ICardForm
+) {
+  try {
+    await fetcher(`/customers/${router.query.customer_id}/cards`, "POST", data);
     alert("Cartão cadastrado com sucesso");
     router.push(`/customers/${router.query.customer_id}/cards`);
-  } else {
-    console.log(r);
+  } catch (error) {
     alert("Falha ao cadastrar cartão");
   }
 }
 
-async function onUpdate(router: NextRouter, data: ICardForm) {
-  const r = await fetch(
-    `${process.env.API_URL}/customers/${router.query.customer_id}/cards/${router.query.card_id}`,
-    {
-      method: "PUT",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    }
-  );
-  if (r.status === 200) {
+async function onUpdate(
+  router: NextRouter,
+  fetcher: FetcherCallback,
+  data: ICardForm
+) {
+  try {
+    await fetcher(
+      `/customers/${router.query.customer_id}/cards/${router.query.card_id}`,
+      "PUT",
+      data
+    );
     alert("Cartão atualizado com sucesso");
     router.push(
       `/customers/${router.query.customer_id}/cards/${router.query.card_id}`
     );
-  } else {
-    console.log(r);
+  } catch (error) {
     alert("Falha ao atualizar cartão");
   }
 }
 
 export function CardForm({ card }: CardFormProps) {
-  const router = useRouter();
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm<ICardForm>({
     defaultValues: {
-      name: card?.name || "",
-      number: card?.number || "",
-      cvv: card?.cvv.toString() || "",
-      expiration_date: card?.expiration_date || "",
+      name: card?.name,
+      number: card?.number,
+      cvv: card?.cvv,
+      expiration_date: card?.expiration_date,
     },
     mode: "onChange",
   });
-  const onSubmit: SubmitHandler<ICardForm> = async (data) => {
-    if (card) {
-      onUpdate(router, data);
-    } else {
-      onAdd(router, data);
-    }
-  };
+  const router = useRouter();
+  const { fetcher } = useFetcherContext();
+
   return (
     <form
       className="flex flex-col gap-4 w-full"
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit((data) =>
+        card ? onUpdate(router, fetcher!, data) : onAdd(router, fetcher!, data)
+      )}
     >
       <Controller
         name="name"
@@ -160,11 +151,16 @@ export function CardForm({ card }: CardFormProps) {
             value: true,
             message: "Data de validade é obrigatória",
           },
+          pattern: {
+            value: /^(0[1-9]|1[0-2])\/[0-9]{2}$/,
+            message: "Data de validade inválida",
+          },
         }}
         render={({ field }) => (
           <FormInputWithLabel
             label="Data de Validade"
-            type="date"
+            type="text"
+            mask="00/00"
             {...field}
             error={errors.expiration_date?.message}
           />

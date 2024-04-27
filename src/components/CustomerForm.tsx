@@ -1,7 +1,10 @@
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { FormInputWithLabel } from "./FormInput";
-import { useCallback } from "react";
 import { NextRouter, useRouter } from "next/router";
+import {
+  FetcherCallback,
+  useFetcherContext,
+} from "@/providers/FetcherProvider";
 
 interface ICustomerForm {
   name: string;
@@ -18,51 +21,41 @@ interface ICustomerForm {
 }
 
 interface CustomerFormProps {
-  user?: any;
+  customer?: any;
 }
 
-async function onAdd(router: NextRouter, data: ICustomerForm) {
-  console.log(data);
-  const r = await fetch(`${process.env.API_URL}/customers`, {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-  if (r.status === 201) {
+async function onAdd(
+  router: NextRouter,
+  fetcher: FetcherCallback,
+  data: ICustomerForm
+) {
+  try {
+    await fetcher("/customers", "POST", data);
     alert("Cliente cadastrado com sucesso");
     router.push(`/customers`);
-  } else {
-    console.log(await r.json());
+  } catch (error) {
     alert("Falha ao cadastrar cliente");
   }
 }
 
-async function onUpdate(router: NextRouter, data: ICustomerForm) {
-  const r = await fetch(
-    `${process.env.API_URL}/customers/${router.query.customer_id}`,
-    {
-      method: "PUT",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    }
-  );
-  if (r.status === 200) {
+async function onUpdate(
+  router: NextRouter,
+  fetcher: FetcherCallback,
+  data: ICustomerForm
+) {
+  try {
+    await fetcher(`/customers/${router.query.customer_id}`, "PUT", data);
+
     alert("Cliente atualizado com sucesso");
     router.push(`/customers/${router.query.customer_id}`);
-  } else {
-    console.log(r);
+  } catch (error) {
     alert("Falha ao atualizar cliente");
   }
 }
 
-export function CustomerForm({ user: customer }: CustomerFormProps) {
+export function CustomerForm({ customer }: CustomerFormProps) {
   const router = useRouter();
+  const { fetcher } = useFetcherContext();
   const {
     control,
     handleSubmit,
@@ -84,22 +77,15 @@ export function CustomerForm({ user: customer }: CustomerFormProps) {
     },
     mode: "onChange",
   });
-  const onSubmit = useCallback<SubmitHandler<ICustomerForm>>(
-    (data) => {
-      if (customer) {
-        onUpdate(router, data);
-      } else {
-        onAdd(router, data);
-      }
-    },
-    [customer, router]
-  );
 
   return (
     <form
       className="flex flex-col gap-4 w-full"
-      onSubmit={handleSubmit(onSubmit)}
-      onInvalid={(e) => console.log(e)}
+      onSubmit={handleSubmit((data) =>
+        customer
+          ? onUpdate(router, fetcher!, data)
+          : onAdd(router, fetcher!, data)
+      )}
     >
       <Controller
         name="name"
