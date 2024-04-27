@@ -1,7 +1,7 @@
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { FormInputWithLabel } from "./FormInput";
-import { useFetcherContext } from "@/providers/FetcherProvider";
 import { useCallback } from "react";
+import { NextRouter, useRouter } from "next/router";
 
 interface ICustomerForm {
   name: string;
@@ -15,23 +15,54 @@ interface ICustomerForm {
   district: string;
   city: string;
   state: string;
-  country: string;
 }
 
 interface CustomerFormProps {
   user?: any;
 }
 
-function onAdd(data: ICustomerForm, fetcher?: any) {
+async function onAdd(router: NextRouter, data: ICustomerForm) {
   console.log(data);
+  const r = await fetch(`${process.env.API_URL}/customers`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  if (r.status === 201) {
+    alert("Cliente cadastrado com sucesso");
+    router.push(`/customers`);
+  } else {
+    console.log(await r.json());
+    alert("Falha ao cadastrar cliente");
+  }
 }
 
-function onUpdate(data: ICustomerForm, fetcher?: any) {
-  console.log(data);
+async function onUpdate(router: NextRouter, data: ICustomerForm) {
+  const r = await fetch(
+    `${process.env.API_URL}/customers/${router.query.customer_id}`,
+    {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }
+  );
+  if (r.status === 200) {
+    alert("Cliente atualizado com sucesso");
+    router.push(`/customers/${router.query.customer_id}`);
+  } else {
+    console.log(r);
+    alert("Falha ao atualizar cliente");
+  }
 }
 
 export function CustomerForm({ user: customer }: CustomerFormProps) {
-  const { fetcher } = useFetcherContext();
+  const router = useRouter();
   const {
     control,
     handleSubmit,
@@ -50,25 +81,24 @@ export function CustomerForm({ user: customer }: CustomerFormProps) {
       district: customer?.address?.district || "",
       city: customer?.address?.city || "",
       state: customer?.address?.state || "",
-      country: "Brasil",
     },
     mode: "onChange",
   });
   const onSubmit = useCallback<SubmitHandler<ICustomerForm>>(
     (data) => {
       if (customer) {
-        onUpdate(data, fetcher);
+        onUpdate(router, data);
       } else {
-        onAdd(data, fetcher);
+        onAdd(router, data);
       }
     },
-    [fetcher, customer]
+    [customer, router]
   );
 
   return (
     <form
       className="flex flex-col gap-4 w-full"
-      onSubmit={handleSubmit(customer ? onUpdate : onAdd)}
+      onSubmit={handleSubmit(onSubmit)}
       onInvalid={(e) => console.log(e)}
     >
       <Controller

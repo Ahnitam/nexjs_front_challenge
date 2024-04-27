@@ -3,14 +3,34 @@ import { Loading } from "@/components/Loading";
 import { Error } from "@/components/Error";
 import { useFetcherContext } from "@/providers/FetcherProvider";
 import { useNavigationContext } from "@/providers/NavigationProvider";
-import { useRouter } from "next/router";
+import { NextRouter, useRouter } from "next/router";
 import { useEffect } from "react";
 import useSWR from "swr";
 import { CustomerInfo } from "@/components/CustomerInfo";
 
+async function onDelete(router: NextRouter) {
+  const r = await fetch(
+    `${process.env.API_URL}/customers/${router.query.customer_id}`,
+    {
+      method: "DELETE",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  if (r.status === 200) {
+    alert("Cliente excluído com sucesso");
+    router.push(`/customers`);
+  } else {
+    alert("Falha ao excluir cliente");
+  }
+}
+
 export default function Customer() {
   const { fetcher } = useFetcherContext();
-  const { customer_id } = useRouter().query;
+  const router = useRouter();
+  const { customer_id } = router.query;
   const { data, error, isLoading } = useSWR(
     `/customers/${customer_id}`,
     fetcher || null
@@ -50,7 +70,10 @@ export default function Customer() {
             <LinkButton href={`/customers/${customer_id}/cards`} color="yellow">
               <span>Cartões</span>
             </LinkButton>
-            <button className="p-2 hover:bg-red-700 bg-red-600 text-white rounded-md">
+            <button
+              className="p-2 hover:bg-red-700 bg-red-600 text-white rounded-md"
+              onClick={() => onDelete(router)}
+            >
               Excluir
             </button>
           </div>
