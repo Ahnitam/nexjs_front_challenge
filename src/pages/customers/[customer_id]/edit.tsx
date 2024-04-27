@@ -5,6 +5,7 @@ import { useNavigationContext } from "@/providers/NavigationProvider";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import useSWR from "swr";
+import { CustomerForm } from "@/components/CustomerForm";
 
 export default function Edit() {
   const { fetcher } = useFetcherContext();
@@ -43,7 +44,7 @@ export default function Edit() {
           <Error message={error.message} />
         )
       ) : (
-        <span>Formulário de edição</span>
+        <CustomerForm user={data} />
       )}
     </div>
   );
