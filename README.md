@@ -1,40 +1,42 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Frontend Next.js para Projeto de Gerenciamento de Clientes com Cartão
 
-## Getting Started
+Este é o frontend em Next.js para o projeto de Gerenciamento de Clientes com Cartão. Ele se comunica com a [API Laravel](https://github.com/Ahnitam/laravel_back_challenge) para exibir dados e interagir com o backend.
 
-First, run the development server:
+## Descrição
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+O frontend Next.js é responsável por renderizar as páginas da aplicação, lidar com a interface do usuário e fazer chamadas à API para obter e enviar dados.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Instalação
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+1. Clone este repositório para a sua máquina local.
+2. Execute `npm install` para instalar as dependências do Next.js.
+3. Crie um arquivo `.env` com as configurações do ambiente.
+4. Execute `npm run dev` para iniciar o servidor de desenvolvimento ou `npm run build` e `npma run start` para iniciar em produção.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+## Variaveis de Ambiente
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+`API_URL`= Url da API do projeto [API Laravel](https://github.com/Ahnitam/laravel_back_challenge)
+(ex: http://localhost:8000/api) [Obrigatória]
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Rotas
 
-## Learn More
+Aqui estão algumas das principais rotas do frontend:
 
-To learn more about Next.js, take a look at the following resources:
+1. **/**: Página inicial da aplicação.
+2. **/customers**: Lista de clientes obtida da API.
+3. **/customers/{customer_id}/cards**: Lista de cartões do cliente obtida da API.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Componentes
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+O frontend utiliza componentes reutilizáveis para construir as páginas. Alguns exemplos de componentes incluem:
 
-## Deploy on Vercel
+- `Header`: Cabeçalho da aplicação.
+- `CustomersList`: Lista de clientes.
+- `CardList`: Lista de cartões.
+- `Pagination`: Paginação
+- `CustomersForm`: Formulario de cliente.
+- `CardForm`: Formulario do cartão.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Licença
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Este projeto está licenciado sob a MIT License.
