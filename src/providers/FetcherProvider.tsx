@@ -23,7 +23,7 @@ export function useFetcherContext() {
 export function FetcherProvider({ children }: FetcherProviderProps) {
   let fetcher = useCallback(
     async (url: string | URL | Request, method?: string) => {
-      const r = await fetch(`http://challenge.test/api${url}`, {
+      const r = await fetch(`${process.env.API_URL}${url}`, {
         method: method || "GET",
         headers: {
           Accept: "application/json",

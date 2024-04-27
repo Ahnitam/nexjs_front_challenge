@@ -1,5 +1,7 @@
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { FormInputWithLabel } from "./FormInput";
+import { useFetcherContext } from "@/providers/FetcherProvider";
+import { useCallback } from "react";
 
 interface ICustomerForm {
   name: string;
@@ -20,7 +22,16 @@ interface CustomerFormProps {
   user?: any;
 }
 
-export function CustomerForm({ user }: CustomerFormProps) {
+function onAdd(data: ICustomerForm, fetcher?: any) {
+  console.log(data);
+}
+
+function onUpdate(data: ICustomerForm, fetcher?: any) {
+  console.log(data);
+}
+
+export function CustomerForm({ user: customer }: CustomerFormProps) {
+  const { fetcher } = useFetcherContext();
   const {
     control,
     handleSubmit,
@@ -28,28 +39,36 @@ export function CustomerForm({ user }: CustomerFormProps) {
     formState: { errors },
   } = useForm<ICustomerForm>({
     defaultValues: {
-      name: user?.name || "",
-      last_name: user?.last_name || "",
-      email: user?.email || "",
-      phone: user?.phone || "",
-      birthday: user?.birthday || "",
-      cep: user?.address?.cep || "",
-      street: user?.address?.street || "",
-      number: user?.address?.number || "",
-      district: user?.address?.district || "",
-      city: user?.address?.city || "",
-      state: user?.address?.state || "",
+      name: customer?.name || "",
+      last_name: customer?.last_name || "",
+      email: customer?.email || "",
+      phone: customer?.phone || "",
+      birthday: customer?.birthday || "",
+      cep: customer?.address?.cep || "",
+      street: customer?.address?.street || "",
+      number: customer?.address?.number || "",
+      district: customer?.address?.district || "",
+      city: customer?.address?.city || "",
+      state: customer?.address?.state || "",
       country: "Brasil",
     },
     mode: "onChange",
   });
-  const onSubmit: SubmitHandler<ICustomerForm> = (data) => {
-    console.log(data);
-  };
+  const onSubmit = useCallback<SubmitHandler<ICustomerForm>>(
+    (data) => {
+      if (customer) {
+        onUpdate(data, fetcher);
+      } else {
+        onAdd(data, fetcher);
+      }
+    },
+    [fetcher, customer]
+  );
+
   return (
     <form
       className="flex flex-col gap-4 w-full"
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(customer ? onUpdate : onAdd)}
       onInvalid={(e) => console.log(e)}
     >
       <Controller
@@ -291,7 +310,7 @@ export function CustomerForm({ user }: CustomerFormProps) {
       </div>
 
       <button className="p-2 bg-green-600 text-white rounded-md">
-        {user ? "Atualizar" : "Cadastrar"}
+        {customer ? "Atualizar" : "Cadastrar"}
       </button>
     </form>
   );
